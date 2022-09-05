@@ -1,0 +1,20 @@
+#!/bin/sh
+
+result=0
+
+echo 'fizzbuzz test'
+
+for ext in js php rb sh
+do
+	printf '%s ' $ext
+	if ./fizzbuzz.$ext | diff - expected > /dev/null 2>&1
+	then
+		printf %s pass
+	else
+		printf %s fail
+		result=1
+	fi
+	printf '\n'
+done
+
+exit $result

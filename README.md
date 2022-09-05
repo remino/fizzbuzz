@@ -13,16 +13,7 @@ Today, I'm still a Web developer. I long the days when we could experiment with 
 
 At least I get the chance to automate things often. It's strange how people, even several developers, still taking the "scenic route" in the work and would rather do everything the longest, most repetitive way. Me, however, I practically write a script for anything I do.
 
-Anyway, recruiters ask me again and again to write "fizz buzz" programs as if I could have cheated my whole career. So, here is the code in different languages. You can browse my commits to see how much time it took to write each of the file. If you want to test it yourself, you can pipe the output into diff and compare it with the content of `expected`, like this:
-
-```
-./fizzbuzz.js | diff - expected
-./fizzbuzz.php | diff - expected
-./fizzbuzz.rb | diff - expected
-./fizzbuzz.sh | diff - expected
-```
-
-If nothing shows up, there is no difference, so it's good.
+Anyway, recruiters ask me again and again to write "fizz buzz" programs as if I could have cheated my whole career. So, here is the code in different languages. You can browse my commits to see how much time it took to write each of the file. If you want to test it yourself, you can run `./test`.
 
 Happy reviewing!
 
