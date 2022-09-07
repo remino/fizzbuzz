@@ -1,14 +1,28 @@
 #!/bin/sh
 
-result=0
+main() {
+	result=0
 
-echo 'fizzbuzz test'
+	echo 'fizzbuzz test'
 
-for name in fizzbuzz.*
-do
-	ext="$( echo "$name" | grep -Eo '\.[^\.]+$' | tr '.' ' ' )"
-	[ -z "$ext" ] && continue
-	printf '%s ' $ext
+	if [ -n "$1" ] && [ -x "$1" ]
+	then
+		test "$1"
+	else
+		for filename in fizzbuzz.*
+		do
+			test "$filename"
+		done
+	fi
+
+	return $result
+}
+
+test() {
+	name="$1"
+	ext="$( echo "$name" | grep -Eo '\.[^\.]+$' | tr -d '.' )"
+	[ -z "$ext" ] && return 1
+	printf '%s ' "$ext"
 	if "./$name" | diff - expected > /dev/null 2>&1
 	then
 		printf %s pass
@@ -17,6 +31,6 @@ do
 		result=1
 	fi
 	printf '\n'
-done
+}
 
-exit $result
+main "$@"
