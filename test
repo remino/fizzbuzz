@@ -4,10 +4,12 @@ result=0
 
 echo 'fizzbuzz test'
 
-for ext in js php rb sh
+for name in fizzbuzz.*
 do
+	ext="$( echo "$name" | grep -Eo '\.[^\.]+$' | tr '.' ' ' )"
+	[ -z "$ext" ] && continue
 	printf '%s ' $ext
-	if ./fizzbuzz.$ext | diff - expected > /dev/null 2>&1
+	if "./$name" | diff - expected > /dev/null 2>&1
 	then
 		printf %s pass
 	else
