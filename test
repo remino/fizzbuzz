@@ -23,7 +23,7 @@ test() {
 	ext="$( echo "$name" | grep -Eo '\.[^\.]+$' | tr -d '.' )"
 	[ -z "$ext" ] && return 1
 	printf '%s ' "$ext"
-	if "./$name" | diff - expected > /dev/null 2>&1
+	if "./$name" | diff --strip-trailing-cr - expected > /dev/null 2>&1
 	then
 		printf %s pass
 	else
