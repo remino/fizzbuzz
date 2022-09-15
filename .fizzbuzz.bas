@@ -1,0 +1,9 @@
+#!/usr/bin/env cbmbasic
+
+10 FOR I=1 TO 100
+15 S$=STR$(I): L=LEN(STR$(I)): R=L-1
+20 IF I-INT(I/15)*15=0 THEN PRINT "fizzbuzz"
+30 IF I-INT(I/15)*15<>0 AND I-INT(I/3)*3=0 THEN PRINT "fizz"
+40 IF I-INT(I/15)*15<>0 AND I-INT(I/3)*3<>0 AND I-INT(I/5)*5=0 THEN PRINT "buzz"
+50 IF I-INT(I/15)*15<>0 AND I-INT(I/3)*3<>0 AND I-INT(I/5)*5<>0 THEN PRINT RIGHT$(S$, R)
+70 NEXT I
