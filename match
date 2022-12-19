@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ $# -lt 2 ] && _error "Specify two files to compare." >&2 && exit 16
+
+diff --strip-trailing-cr "$1" "$2" > /dev/null 2>&1

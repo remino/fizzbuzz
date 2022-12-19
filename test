@@ -3,14 +3,13 @@
 _main() {
 	trap _exit INT TERM
 
-	echo 'fizzbuzz test'
-
 	RESULT=0
+	PATH="$( readlink -f "$0" ):$PATH"
 	TMP_FILES="$( _mktmpfile )"
 
 	if [ -n "$1" ] && [ -x "$1" ]
 	then
-		test "$1"
+		_test "$1"
 	else
 		for filename in fizzbuzz.*
 		do
@@ -57,9 +56,11 @@ _test() {
 	name="$1"
 	ext="$( echo "$name" | grep -Eo '\.[^\.]+$' | tr -d '.' )"
 
+	[ "$ext" = "txt" ] && return
 	[ -z "$ext" ] && return 1
 
 	tmp_file="$( _add_tmp_file )"
+	expected="$( basename "$name" ".$ext" ).txt"
 
 	"./$name" > "$tmp_file" 2>/dev/null
 
@@ -67,13 +68,13 @@ _test() {
 
 	if [ $code -eq 127 ]
 	then
-		echo "$ext WARN: Interpreter not installed."
+		echo "$name WARN: Interpreter not installed."
 	else
-		if diff --strip-trailing-cr "$tmp_file" expected > /dev/null 2>&1
+		if match "$tmp_file" "$expected"
 		then
-			echo "$ext PASS"
+			echo "$name PASS"
 		else
-			echo "$ext FAIL"
+			echo "$name FAIL"
 			RESULT=1
 		fi
 	fi
