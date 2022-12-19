@@ -68,13 +68,13 @@ _test() {
 
 	if [ $code -eq 127 ]
 	then
-		echo "$name WARN: Interpreter not installed."
+		echo "WARN $name Interpreter not installed."
 	else
 		if match "$tmp_file" "$expected"
 		then
-			echo "$name PASS"
+			echo "PASS $name"
 		else
-			echo "$name FAIL"
+			echo "FAIL $name"
 			RESULT=1
 		fi
 	fi
