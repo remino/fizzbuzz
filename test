@@ -64,7 +64,7 @@ _test() {
 	[ -z "$ext" ] && return 1
 
 	tmp_file="$( _add_tmp_file )"
-	expected="$( basename "$name" ".$ext" ).txt"
+	expected="$( basename "$name" ".$ext" | sed 's/^\.//' ).txt"
 
 	"./$name" > "$tmp_file" 2>/dev/null
 
