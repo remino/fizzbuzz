@@ -9,7 +9,11 @@ _main() {
 
 	if [ -n "$1" ] && [ -x "$1" ]
 	then
-		_test "$1"
+		while [ $# -gt 0 ]
+		do
+			_test "$1"
+			shift
+		done
 	else
 		for filename in fizzbuzz.*
 		do
