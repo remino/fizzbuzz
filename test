@@ -1,9 +1,12 @@
 #!/bin/sh
 
-main() {
-	result=0
+_main() {
+	trap _exit INT TERM
 
 	echo 'fizzbuzz test'
+
+	RESULT=0
+	TMP_FILES="$( _mktmpfile )"
 
 	if [ -n "$1" ] && [ -x "$1" ]
 	then
@@ -11,26 +14,71 @@ main() {
 	else
 		for filename in fizzbuzz.*
 		do
-			test "$filename"
+			_test "$filename" &
 		done
+
+		wait
 	fi
 
-	return $result
+	_exit $RESULT
 }
 
-test() {
+_add_tmp_file() {
+	file="$( _mktmpfile )"
+	echo "$file" >> "$TMP_FILES"
+	echo "$file"
+}
+
+_cleanup() {
+	[ -z "$TMP_FILES" ] && return
+	[ ! -f "$TMP_FILES" ] && return
+
+	while read -r file
+	do
+		[ ! -f "$file" ] && continue
+		rm "$file"
+	done < "$TMP_FILES"
+
+	rm "$TMP_FILES"
+}
+
+_exit() {
+	exit_code=$?
+	_cleanup
+	[ $# -gt 0 ] && exit "$1"
+	exit $exit_code
+}
+
+_mktmpfile() {
+	mktemp -t "$( basename "$0" )"
+}
+
+_test() {
 	name="$1"
 	ext="$( echo "$name" | grep -Eo '\.[^\.]+$' | tr -d '.' )"
+
 	[ -z "$ext" ] && return 1
-	printf '%s ' "$ext"
-	if "./$name" | diff --strip-trailing-cr - expected > /dev/null 2>&1
+
+	tmp_file="$( _add_tmp_file )"
+
+	"./$name" > "$tmp_file" 2>/dev/null
+
+	code=$?
+
+	if [ $code -eq 127 ]
 	then
-		printf %s pass
+		echo "$ext WARN: Interpreter not installed."
 	else
-		printf %s fail
-		result=1
+		if diff --strip-trailing-cr "$tmp_file" expected > /dev/null 2>&1
+		then
+			echo "$ext PASS"
+		else
+			echo "$ext FAIL"
+			RESULT=1
+		fi
 	fi
-	printf '\n'
+
+	rm "$tmp_file"
 }
 
-main "$@"
+_main "$@"
